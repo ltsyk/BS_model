@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black-Scholes期权定价模型可视化</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Black-Scholes期权定价模型可视化学习平台</h1>
+            <p class="subtitle">交互式期权定价与Greeks可视化工具</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 参数输入面板 -->
+            <div class="input-panel">
+                <h2>模型参数</h2>
+
+                <div class="input-group">
+                    <label for="spotPrice">标的资产价格 (S):</label>
+                    <input type="number" id="spotPrice" value="100" step="1" min="0.1">
+                    <span class="unit">$</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="strikePrice">执行价格 (K):</label>
+                    <input type="number" id="strikePrice" value="100" step="1" min="0.1">
+                    <span class="unit">$</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="timeToMaturity">到期时间 (T):</label>
+                    <input type="number" id="timeToMaturity" value="1.0" step="0.1" min="0.01">
+                    <span class="unit">年</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="riskFreeRate">无风险利率 (r):</label>
+                    <input type="number" id="riskFreeRate" value="5" step="0.1" min="0">
+                    <span class="unit">%</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="volatility">波动率 (σ):</label>
+                    <input type="number" id="volatility" value="20" step="1" min="0.1">
+                    <span class="unit">%</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="optionType">期权类型:</label>
+                    <select id="optionType">
+                        <option value="call">看涨期权 (Call)</option>
+                        <option value="put">看跌期权 (Put)</option>
+                    </select>
+                </div>
+
+                <button id="calculateBtn" class="btn-primary">计算</button>
+            </div>
+
+            <!-- 结果显示面板 -->
+            <div class="results-panel">
+                <h2>计算结果</h2>
+
+                <div class="results-tabs">
+                    <button class="tab-btn active" data-tab="call">看涨期权</button>
+                    <button class="tab-btn" data-tab="put">看跌期权</button>
+                </div>
+
+                <div id="callResults" class="tab-content active">
+                    <div class="result-card">
+                        <h3>期权价格</h3>
+                        <div class="result-value" id="callPrice">--</div>
+                    </div>
+
+                    <div class="greeks-grid">
+                        <div class="greek-card">
+                            <h4>Delta (Δ)</h4>
+                            <div class="greek-value" id="callDelta">--</div>
+                            <p class="greek-desc">价格敏感度</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Gamma (Γ)</h4>
+                            <div class="greek-value" id="callGamma">--</div>
+                            <p class="greek-desc">Delta变化率</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Theta (Θ)</h4>
+                            <div class="greek-value" id="callTheta">--</div>
+                            <p class="greek-desc">时间衰减/日</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Vega (ν)</h4>
+                            <div class="greek-value" id="callVega">--</div>
+                            <p class="greek-desc">波动率敏感度</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Rho (ρ)</h4>
+                            <div class="greek-value" id="callRho">--</div>
+                            <p class="greek-desc">利率敏感度</p>
+                        </div>
+                    </div>
+
+                    <div class="value-breakdown">
+                        <div class="breakdown-item">
+                            <span>内在价值:</span>
+                            <span id="callIntrinsic">--</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>时间价值:</span>
+                            <span id="callTime">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="putResults" class="tab-content">
+                    <div class="result-card">
+                        <h3>期权价格</h3>
+                        <div class="result-value" id="putPrice">--</div>
+                    </div>
+
+                    <div class="greeks-grid">
+                        <div class="greek-card">
+                            <h4>Delta (Δ)</h4>
+                            <div class="greek-value" id="putDelta">--</div>
+                            <p class="greek-desc">价格敏感度</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Gamma (Γ)</h4>
+                            <div class="greek-value" id="putGamma">--</div>
+                            <p class="greek-desc">Delta变化率</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Theta (Θ)</h4>
+                            <div class="greek-value" id="putTheta">--</div>
+                            <p class="greek-desc">时间衰减/日</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Vega (ν)</h4>
+                            <div class="greek-value" id="putVega">--</div>
+                            <p class="greek-desc">波动率敏感度</p>
+                        </div>
+
+                        <div class="greek-card">
+                            <h4>Rho (ρ)</h4>
+                            <div class="greek-value" id="putRho">--</div>
+                            <p class="greek-desc">利率敏感度</p>
+                        </div>
+                    </div>
+
+                    <div class="value-breakdown">
+                        <div class="breakdown-item">
+                            <span>内在价值:</span>
+                            <span id="putIntrinsic">--</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>时间价值:</span>
+                            <span id="putTime">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 可视化图表 -->
+        <div class="charts-section">
+            <h2>可视化分析</h2>
+
+            <div class="chart-tabs">
+                <button class="chart-tab-btn active" data-chart="payoff">期权收益图</button>
+                <button class="chart-tab-btn" data-chart="delta">Delta曲面</button>
+                <button class="chart-tab-btn" data-chart="gamma">Gamma曲面</button>
+                <button class="chart-tab-btn" data-chart="theta">Theta曲面</button>
+                <button class="chart-tab-btn" data-chart="vega">Vega曲面</button>
+            </div>
+
+            <div id="payoffChart" class="chart-container active"></div>
+            <div id="deltaChart" class="chart-container"></div>
+            <div id="gammaChart" class="chart-container"></div>
+            <div id="thetaChart" class="chart-container"></div>
+            <div id="vegaChart" class="chart-container"></div>
+        </div>
+
+        <!-- 教育信息 -->
+        <div class="education-section">
+            <h2>Black-Scholes模型说明</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>模型公式</h3>
+                    <p>看涨期权: C = S₀N(d₁) - Ke⁻ʳᵀN(d₂)</p>
+                    <p>看跌期权: P = Ke⁻ʳᵀN(-d₂) - S₀N(-d₁)</p>
+                    <p>其中:</p>
+                    <p>d₁ = [ln(S/K) + (r + σ²/2)T] / (σ√T)</p>
+                    <p>d₂ = d₁ - σ√T</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Greeks解释</h3>
+                    <p><strong>Delta:</strong> 标的资产价格变动1单位，期权价格变动</p>
+                    <p><strong>Gamma:</strong> 标的资产价格变动1单位，Delta的变动</p>
+                    <p><strong>Theta:</strong> 时间过去1天，期权价格变动（通常为负）</p>
+                    <p><strong>Vega:</strong> 波动率变动1%，期权价格变动</p>
+                    <p><strong>Rho:</strong> 利率变动1%，期权价格变动</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>模型假设</h3>
+                    <ul>
+                        <li>欧式期权（只能在到期日行权）</li>
+                        <li>无交易成本和税收</li>
+                        <li>标的资产价格服从几何布朗运动</li>
+                        <li>波动率和无风险利率恒定</li>
+                        <li>标的资产不支付股息</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>实际应用</h3>
+                    <ul>
+                        <li>期权定价和估值</li>
+                        <li>风险管理和对冲策略</li>
+                        <li>隐含波动率计算</li>
+                        <li>期权交易策略分析</li>
+                        <li>衍生品组合管理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
