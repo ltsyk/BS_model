@@ -52,28 +52,98 @@
 
 ### 环境要求
 - Python 3.8 或更高版本
-- pip包管理器
+- [uv](https://github.com/astral-sh/uv) - 现代化Python包管理器（推荐）
 
-### 安装步骤
+### 安装 uv
 
-1. 克隆项目
+**Linux/macOS:**
 ```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows (PowerShell):**
+```powershell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**或使用 pip:**
+```bash
+pip install uv
+```
+
+### 快速启动
+
+#### 方法1: 使用启动脚本（最简单）
+
+**Linux/macOS:**
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+**Windows:**
+```cmd
+run.bat
+```
+
+启动脚本会自动创建虚拟环境、安装依赖并启动服务器。
+
+#### 方法2: 使用 Makefile（Linux/macOS）
+
+```bash
+make install  # 安装依赖
+make run      # 启动服务器
+```
+
+#### 方法3: 手动安装
+
+```bash
+# 1. 克隆项目
 git clone <repository-url>
 cd BS_model
-```
 
-2. 安装依赖
-```bash
-pip install -r requirements.txt
-```
+# 2. 创建虚拟环境
+uv venv
 
-3. 运行应用
-```bash
+# 3. 激活虚拟环境
+# Linux/macOS:
+source .venv/bin/activate
+# Windows:
+.venv\Scripts\activate
+
+# 4. 安装依赖
+uv pip install -e .
+
+# 5. 运行应用
 python app.py
 ```
 
-4. 访问应用
-打开浏览器访问: http://localhost:5000
+#### 传统方式（使用 pip）
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+### 访问应用
+启动后，打开浏览器访问: **http://localhost:5000**
+
+### 命令行选项
+
+```bash
+python app.py --help              # 查看帮助
+python app.py --port 8080         # 指定端口
+python app.py --host 127.0.0.1    # 指定主机
+python app.py --debug             # 调试模式
+```
+
+### 运行示例
+
+```bash
+make examples      # 使用 Makefile
+# 或
+uv run python examples.py
+```
 
 ## 使用指南
 
@@ -281,22 +351,38 @@ Put ρ = -KTe⁻ʳᵀN(-d₂)
 }
 ```
 
+## 为什么使用 uv？
+
+本项目使用 [uv](https://github.com/astral-sh/uv) 作为包管理器，相比传统的 pip 有显著优势：
+
+- **极速安装**: 使用 Rust 编写，依赖安装速度比 pip 快 10-100 倍
+- **智能依赖解析**: 更可靠的依赖冲突解决
+- **磁盘空间优化**: 全局缓存机制，避免重复下载
+- **现代化设计**: 支持 pyproject.toml，遵循 Python 最新标准
+- **一致性**: 确保团队成员使用相同的依赖版本
+
 ## 项目结构
 
 ```
 BS_model/
 ├── app.py                  # Flask应用主文件
 ├── black_scholes.py        # Black-Scholes模型核心算法
-├── requirements.txt        # Python依赖
-├── README.md              # 项目文档
-├── .gitignore             # Git忽略文件
-├── templates/             # HTML模板
-│   └── index.html         # 主页面
-└── static/                # 静态资源
+├── examples.py             # 完整使用示例
+├── pyproject.toml          # 项目配置（uv/pip）
+├── requirements.txt        # Python依赖（备用）
+├── run.sh                  # Unix/Linux/macOS 启动脚本
+├── run.bat                 # Windows 启动脚本
+├── Makefile                # 开发命令（Linux/macOS）
+├── QUICKSTART.md           # 快速开始指南
+├── README.md               # 项目文档
+├── .gitignore              # Git忽略文件
+├── templates/              # HTML模板
+│   └── index.html          # 主页面
+└── static/                 # 静态资源
     ├── css/
-    │   └── style.css      # 样式文件
+    │   └── style.css       # 样式文件
     └── js/
-        └── app.js         # JavaScript逻辑
+        └── app.js          # JavaScript逻辑
 ```
 
 ## 使用Python模块
@@ -377,6 +463,14 @@ MIT License
 如有问题或建议，请通过GitHub Issues联系。
 
 ## 更新日志
+
+### v1.1.0 (2025-11-14)
+- 🚀 迁移到 uv 包管理器，提升安装速度
+- 📦 添加 pyproject.toml 标准化配置
+- 🛠️ 新增启动脚本 (run.sh, run.bat)
+- 📝 添加快速开始指南 (QUICKSTART.md)
+- 🔧 添加 Makefile 便捷开发命令
+- ⚡ 优化依赖管理和项目结构
 
 ### v1.0.0 (2025-11-13)
 - 初始版本发布

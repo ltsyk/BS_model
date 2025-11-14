@@ -190,5 +190,26 @@ def implied_vol():
         return jsonify({'error': str(e)}), 500
 
 
+def main():
+    """启动Flask应用服务器"""
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Black-Scholes期权定价可视化服务器')
+    parser.add_argument('--host', default='0.0.0.0', help='服务器主机地址 (默认: 0.0.0.0)')
+    parser.add_argument('--port', type=int, default=5000, help='服务器端口 (默认: 5000)')
+    parser.add_argument('--debug', action='store_true', help='启用调试模式')
+
+    args = parser.parse_args()
+
+    print(f"\n{'='*60}")
+    print("Black-Scholes期权定价模型可视化平台")
+    print(f"{'='*60}")
+    print(f"服务器运行在: http://{args.host}:{args.port}")
+    print(f"调试模式: {'开启' if args.debug else '关闭'}")
+    print(f"{'='*60}\n")
+
+    app.run(debug=args.debug, host=args.host, port=args.port)
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    main()
