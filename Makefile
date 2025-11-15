@@ -24,23 +24,23 @@ dev:
 
 run:
 	@echo "启动服务器..."
-	uv run python app.py
+	@. .venv/bin/activate && python app.py
 
 examples:
 	@echo "运行示例代码..."
-	uv run python examples.py
+	@. .venv/bin/activate && python examples.py
 
 test:
 	@echo "运行测试..."
-	uv run pytest
+	@. .venv/bin/activate && pytest
 
 format:
 	@echo "格式化代码..."
-	uv run black .
+	@. .venv/bin/activate && black .
 
 lint:
 	@echo "代码检查..."
-	uv run flake8 .
+	@. .venv/bin/activate && flake8 .
 
 clean:
 	@echo "清理缓存文件..."

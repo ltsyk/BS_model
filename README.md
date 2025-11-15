@@ -141,8 +141,8 @@ python app.py --debug             # 调试模式
 
 ```bash
 make examples      # 使用 Makefile
-# 或
-uv run python examples.py
+# 或激活虚拟环境后运行
+source .venv/bin/activate && python examples.py
 ```
 
 ## 使用指南

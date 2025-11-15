@@ -92,8 +92,10 @@ python app.py
 # 使用 Makefile
 make examples
 
-# 或直接运行
-uv run python examples.py
+# 或激活虚拟环境后运行
+source .venv/bin/activate  # Linux/macOS
+# 或 .venv\Scripts\activate  # Windows
+python examples.py
 ```
 
 ## 命令行选项

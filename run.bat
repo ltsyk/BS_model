@@ -33,5 +33,6 @@ echo.
 echo 启动服务器...
 echo.
 
-REM 运行应用
-uv run python app.py %*
+REM 激活虚拟环境并运行应用
+call .venv\Scripts\activate.bat
+python app.py %*

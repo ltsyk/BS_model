@@ -35,5 +35,6 @@ echo ""
 echo "启动服务器..."
 echo ""
 
-# 运行应用
-uv run python app.py "$@"
+# 激活虚拟环境并运行应用
+source .venv/bin/activate
+python app.py "$@"
