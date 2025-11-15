@@ -112,7 +112,7 @@ source .venv/bin/activate
 .venv\Scripts\activate
 
 # 4. 安装依赖
-uv pip install -e .
+uv pip install -r requirements.txt
 
 # 5. 运行应用
 python app.py

@@ -26,7 +26,7 @@ echo √ 虚拟环境已准备
 
 REM 安装依赖
 echo 安装/更新依赖...
-uv pip install -e .
+uv pip install -r requirements.txt
 
 echo √ 依赖已安装
 echo.

@@ -72,7 +72,7 @@ source .venv/bin/activate
 .venv\Scripts\activate
 
 # 3. 安装依赖
-uv pip install -e .
+uv pip install -r requirements.txt
 
 # 4. 启动服务器
 python app.py

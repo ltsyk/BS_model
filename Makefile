@@ -16,7 +16,7 @@ help:
 
 install:
 	@echo "安装项目依赖..."
-	uv pip install -e .
+	uv pip install -r requirements.txt
 
 dev:
 	@echo "安装开发依赖..."
@@ -44,10 +44,12 @@ lint:
 
 clean:
 	@echo "清理缓存文件..."
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete
-	find . -type f -name "*.pyo" -delete
-	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name ".coverage" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	@find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".coverage" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "dist" -exec rm -rf {} + 2>/dev/null || true
 	@echo "清理完成!"
