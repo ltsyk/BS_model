@@ -50,11 +50,14 @@ Repository = "https://github.com/ltsyk/BS_model"
 Issues = "https://github.com/ltsyk/BS_model/issues"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.uv]
-dev-dependencies = [
+[tool.setuptools]
+py-modules = ["app", "black_scholes", "examples"]
+
+[dependency-groups]
+dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "black>=23.0.0",
